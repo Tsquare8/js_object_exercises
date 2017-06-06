@@ -32,29 +32,94 @@
  */
 
 
- (function(){
-    //@see https://stackoverflow.com/questions/1335851/what-does-use-strict-do-in-javascript-and-what-is-the-reasoning-behind-it
-    'use strict';
+(function() {
+  //@see https://stackoverflow.com/questions/1335851/what-does-use-strict-do-in-javascript-and-what-is-the-reasoning-behind-it
+  'use strict';
 
-    ///////////////////////////
-    // Put your code here!
-    ///////////////////////////
+  ///////////////////////////
+  function LivingThing(name, health) {
+    var name = name;
+    var health = health;
 
-    
-
-    //The code below should work when you are done
-    console.log("A hero emerges!");
-
-    console.log("The noble " + hero.getName() + " has vowed to defeat the monsters and save the realm");
-    console.log("Will they be victorious?");
-
-    hero.fight(monsters);
-
-    if (hero.isAlive()) {
-        console.log("The hero, " + hero.getName() + ", prevailed!");
+    this.getName = function() {
+      return name;
     }
-    else {
-        console.log(hero.getName() + " was bested by the monsters. We are doomed");
+
+    this.getHealth = function() {
+      return health;
     }
+
+    this.isAlive = function() {
+      if (this.getHealth() > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    this.setHealth = function(x) {
+      health = health - x;
+    }
+  }
+
+
+  function Hero(name, health) {
+
+    this.name = name;
+    this.health = health;
+
+    LivingThing.call(this, name, health);
+
+    this.attack = function(LivingThing) {
+      let randomMonsters = getRandomIntInclusive(0, 10);
+      LivingThing.setHealth(randomMonsters);
+      console.log("Hero caused damage of " + randomMonsters + ". Only health of " + LivingThing.getHealth() + " remains for " + LivingThing.getName() + " .");
+
+      let randomHero = getRandomIntInclusive(0, 10);
+      this.setHealth(randomHero);
+      console.log("Monster caused damage of " + randomHero + " . Only health of " + this.getHealth() + " remains for Beowolf");
+    }
+
+    this.fight = function(monsters) {
+      for (let i = 0; i < monsters.length; i++) {
+        while (this.getHealth() > 0 && monsters[i].getHealth() > 0){
+        this.attack(monsters[i]);
+      }
+      }
+    }
+  }
+
+//need below for getRandomIntInclusive to function
+  function getRandomIntInclusive(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+//////////////////////////////////////////////
+
+  let LivingThing1 = new LivingThing("Rat", 5);
+  let LivingThing2 = new LivingThing("Goblin", 30);
+  let LivingThing3 = new LivingThing("Ogre", 80);
+
+  let monsters = [LivingThing1, LivingThing2, LivingThing3];
+
+  let hero = new Hero("Beowolf", 100)
+
+
+  ///////////////////////////
+
+
+
+  //The code below should work when you are done
+  console.log("A hero emerges!");
+
+  console.log("The noble " + hero.getName() + " has vowed to defeat the monsters and save the realm");
+  console.log("Will they be victorious?");
+
+  hero.fight(monsters);
+
+  if (hero.isAlive()) {
+    console.log("The hero, " + hero.getName() + ", prevailed!");
+  } else {
+    console.log(hero.getName() + " was bested by the monsters. We are doomed");
+  }
 
 })();
